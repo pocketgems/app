@@ -1,0 +1,17 @@
+name: check-pr-body
+on: 
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+jobs:
+  check_agreement:
+    name: Check Required PR Contents
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Private Key Agreement
+        if: |
+          !contains(github.event.pull_request.body, 'I confirm there is no private key, token, secret, etc. added in this pull request or any intermediate commits, as they will become publicly accessible and result in security breach.')
+        run: exit 1
+      - name: Check Contributor Agreement
+        if: |
+          !contains(github.event.pull_request.body, 'By submitting this pull request to Pocket Gems'' Github repository, I confirm that Pocket Gems can use, modify, copy and redistribute my contribution, under the terms of Pocket Gems'' choice, which as of date of this submission, shall be the Apache License Version 2.0, and may be changed at any time at Pocket Gems'' sole discretion.')
+        run: exit 1
