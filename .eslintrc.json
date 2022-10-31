@@ -1,0 +1,43 @@
+{
+    "root": true,
+    "env": {
+        "es2020": true,
+        "browser": false,
+        "commonjs": true,
+        "jest": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "standard",
+        "plugin:import/errors",
+        "plugin:import/warnings"
+    ],
+    "plugins": [
+        "import"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 12
+    },
+    "parser": "@babel/eslint-parser",
+    "rules": {
+        "import/order": [
+            "error",
+            {
+                "groups": [
+                    "builtin",
+                    "external",
+                    "parent",
+                    "sibling",
+                    "index"
+                ],
+                "alphabetize": {
+                    "order": "asc",
+                    "caseInsensitive": true
+                },
+                "newlines-between": "always"
+            }
+        ],
+        "no-var": "error",
+        "multiline-ternary": 1
+    }
+}

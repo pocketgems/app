@@ -1,0 +1,83 @@
+{
+  "name": "@pocketgems/app",
+  "version": "0.0.1",
+  "description": "Todea App Library",
+  "license": "Apache-2.0",
+  "main": "src/index.js",
+  "scripts": {
+    "debug": "yarn start-local-db; ./node_modules/nodemon/bin/nodemon.js --no-lazy --legacy-watch --watch ./src --watch ./examples --watch ./test --inspect=9229 ./node_modules/jest/bin/jest.js --coverage --config=./jest.config.json --runInBand",
+    "test": "yarn start-local-db; ./node_modules/jest/bin/jest.js --coverage --config=./jest.config.json",
+    "setup": "yarn",
+    "start-local-db": "yarn --cwd ./node_modules/@pocketgems/dynamodb setup; yarn --cwd ./node_modules/@pocketgems/dynamodb start-local-db"
+  },
+  "contributors": [
+    {
+      "name": "David Underhill"
+    },
+    {
+      "name": "Yu Guan"
+    },
+    {
+      "name": "Solaman Huq"
+    },
+    {
+      "name": "Shimul Bhowmik"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pocketgems/app"
+  },
+  "files": [
+    "src/**",
+    "!src/app.js",
+    "docs/**",
+    "test/environment.js",
+    "test/base-test.js"
+  ],
+  "dependencies": {
+    "@pocketgems/dynamodb": "^0.1.0",
+    "@pocketgems/schema": "^0.1.0",
+    "fastify": "^3.0.2",
+    "fastify-compress": "^3.4.2",
+    "fastify-cookie": "^4.1.0",
+    "fastify-plugin": "^2.0.1",
+    "fastify-static": "^3.3.0",
+    "got": "^11.5.2",
+    "swagger-ui-dist": "^4.15.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.12",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/preset-env": "^7.17.12",
+    "@pocketgems/unit-test": "^0.0.1",
+    "babel-loader": "^8.2.2",
+    "eslint": "^8.22.0",
+    "eslint-config-standard": "15.0.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.4.2",
+    "license-webpack-plugin": "^2.3.17",
+    "nodemon": "^2.0.20",
+    "standard": "^15.0.0",
+    "superagent-defaults": "^0.1.14",
+    "supertest": "^4.0.2",
+    "webpack": "^5.13.0",
+    "webpack-cli": "^4.3.1"
+  },
+  "standard": {
+    "envs": [
+      "jest"
+    ],
+    "globals": [
+      "fail"
+    ],
+    "ignore": [
+      "**/node_modules/**"
+    ],
+    "parser": "@babel/eslint-parser"
+  }
+}

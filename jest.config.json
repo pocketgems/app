@@ -1,0 +1,32 @@
+{
+  "collectCoverageFrom": [
+    "<rootDir>/src/**/*.js",
+    "<rootDir>/examples/**/*.js"
+  ],
+  "coverageDirectory": "/tmp/coverage",
+  "coverageReporters": ["lcov", "text", "json"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 100,
+      "functions": 100,
+      "lines": 100,
+      "statements": 100
+    }
+  },
+  "roots": ["<rootDir>/src", "<rootDir>/test"],
+  "modulePathIgnorePatterns": ["node_modules"],
+  "testPathIgnorePatterns": ["node_modules"],
+  "testMatch": [
+    "<rootDir>/test/*(*/)unit-test*.js"
+  ],
+  "setupFiles": [
+    "<rootDir>/test/environment.js"
+  ],
+  "reporters": [
+    "@pocketgems/unit-test/src/custom-reporter.js",
+    "@pocketgems/unit-test/src/summary-reporter.js"
+  ],
+  "watchPathIgnorePatterns": ["node_modules"],
+  "verbose": false,
+  "noStackTrace": false
+}
