@@ -10,8 +10,12 @@ afterAll(async () => {
 })
 
 class BaseAppTest extends BaseTest {
+  static async requireApp () {
+    return require('../src/app')
+  }
+
   async beforeAll () {
-    this.fastify = FASTIFY_CACHE ?? await require('../src/app')
+    this.fastify = FASTIFY_CACHE ?? await this.constructor.requireApp()
     FASTIFY_CACHE = this.fastify
 
     await Promise.all([super.beforeAll(), this.fastify.ready()])
