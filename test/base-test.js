@@ -5,7 +5,7 @@ const supertest = require('supertest')
 let FASTIFY_CACHE
 
 afterAll(async () => {
-  await FASTIFY_CACHE?.closeAll()
+  await FASTIFY_CACHE?.close()
   FASTIFY_CACHE = undefined
 })
 
