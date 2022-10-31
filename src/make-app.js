@@ -6,6 +6,7 @@ const c2jPlugin = require('../src/plugins/aws-c2j')
 const compressPlugin = require('../src/plugins/compress')
 const contentParserPlugin = require('../src/plugins/content-parser')
 const errorHandlerPlugin = require('../src/plugins/error-handler')
+const healthCheckPlugin = require('../src/plugins/health-check')
 const latencyTrackerPlugin = require('../src/plugins/latency-tracker')
 
 const ComponentRegistrator = require('./component-registrator')
@@ -16,6 +17,7 @@ async function makeApp ({
   RegistratorCls = ComponentRegistrator,
   cookieSecret,
   returnErrorDetail,
+  healthCheckPath,
   apiId,
   apiName,
   apiVersion,
@@ -39,6 +41,7 @@ async function makeApp ({
     .register(contentParserPlugin)
     .register(latencyTrackerPlugin)
     .register(errorHandlerPlugin, { errorHandler: { returnErrorDetail } })
+    .register(healthCheckPlugin, { healthCheck: { path: healthCheckPath } })
 
   const registrator = new RegistratorCls(app, service)
   for (const component of Object.values(components)) {

@@ -10,7 +10,7 @@ class DynamodbLibTest extends BaseAppTest {
   async testThrow500 () {
     // Make sure custom loggers etc works.
     const result = await this.app.post(getURI('/throw500')).expect(500)
-    expect(result.body.stack.join('\n')).toContain('/api/examples')
+    expect(result.body.stack.join('\n')).toContain('/app/examples')
   }
 
   async testClientErrorAPIWorking () {

@@ -7,6 +7,7 @@ module.exports = makeApp({
   components,
   cookieSecret: 'unit-test',
   returnErrorDetail: true,
+  healthCheckPath: '/',
   apiId: 'unittest',
   apiName: 'Unit Test',
   apiVersion: '2020-02-20',

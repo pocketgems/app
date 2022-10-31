@@ -588,6 +588,10 @@ class RequestValidationTest extends BaseAppTest {
         data: {}
       })
   }
+
+  async testHealthCheck () {
+    await this.app.get('/').expect(200)
+  }
 }
 
 runTests(BasicTest, RequestValidationTest)
