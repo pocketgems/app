@@ -27,7 +27,7 @@ enterprise scale applications supporting millions of users.
   - Scalable
   - Lighting fast
   - Support DAX, Index, Query, Scan and more
-- High level [API library](docs/libs/api.md)
+- High level [API library](docs/api.md)
   - Routing
   - Input, output schema
   - Exceptions
@@ -105,7 +105,7 @@ class GetOrderAPI extends TxAPI {
 }
 ```
 
-You can read more about API interface [here](docs/libs/api.md).
+You can read more about API interface [here](docs/api.md).
 
 ## Creating An App
 To create a Todea app, you have to call `makeApp` like this:

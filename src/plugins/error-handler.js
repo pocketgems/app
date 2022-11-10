@@ -2,7 +2,7 @@ const S = require('@pocketgems/schema')
 const fp = require('fastify-plugin')
 const uuidv4 = require('uuid').v4
 
-const { InvalidInputException } = require('../exception')
+const { EXCEPTIONS: { InvalidInputException } } = require('../api')
 
 module.exports = fp(function (fastify, options, next) {
   const returnErrorDetail = options.errorHandler.returnErrorDetail
