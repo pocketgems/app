@@ -9,7 +9,6 @@ module.exports = (options) => {
   }
   if (options.compress) {
     const headers = {
-      'content-encoding': 'br',
       ...options.headers
     }
     options.headers = headers
@@ -20,6 +19,10 @@ module.exports = (options) => {
       headers['content-type'] = 'application/json'
       options.body = zlib.brotliCompressSync(JSON.stringify(options.json))
       delete options.json
+    }
+
+    if (options.body) {
+      headers['content-encoding'] = 'br'
     }
   }
   return got(options)

@@ -1,10 +1,14 @@
 const zlib = require('zlib')
 
 jest.mock('got')
-const { BaseTest, runTests } = require('@pocketgems/unit-test')
 const mockedGot = require('got')
 
 const gotWrapper = require('../src/got')
+
+const {
+  BaseTest,
+  runTests
+} = require('./base-test')
 
 // Tests to make sure new JS features introduced in node14
 // are working, and context highlight, linter etc are compatible
@@ -43,6 +47,26 @@ class CompressionTest extends BaseTest {
       url: '123',
       body: '321',
       compress: false
+    })
+    mock.mockRestore()
+  }
+
+  async testContentEncoding () {
+    const mock = mockedGot.mockImplementation(({ headers }) => {
+      expect(headers['content-encoding']).toBe('br')
+    })
+    await gotWrapper({
+      url: '123',
+      body: '321',
+      compress: true
+    })
+    mock.mockRestore()
+    mockedGot.mockImplementation(({ headers }) => {
+      expect(headers['content-encoding']).toBeUndefined()
+    })
+    await gotWrapper({
+      url: '123',
+      compress: true
     })
     mock.mockRestore()
   }
