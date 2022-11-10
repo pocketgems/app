@@ -1,13 +1,14 @@
 {
   "name": "@pocketgems/app",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Todea App Library",
   "license": "Apache-2.0",
   "main": "src/index.js",
   "scripts": {
+    "build-doc": "./docs/build.sh",
     "debug": "yarn start-local-db; ./node_modules/nodemon/bin/nodemon.js --no-lazy --legacy-watch --watch ./src --watch ./examples --watch ./test --inspect=9229 ./node_modules/jest/bin/jest.js --coverage --config=./jest.config.json --runInBand",
     "test": "yarn start-local-db; ./node_modules/jest/bin/jest.js --coverage --config=./jest.config.json",
-    "setup": "yarn",
+    "setup": "yarn && pip install -r requirements.txt",
     "start-local-db": "yarn --cwd ./node_modules/@pocketgems/dynamodb setup; yarn --cwd ./node_modules/@pocketgems/dynamodb start-local-db"
   },
   "contributors": [
@@ -36,7 +37,7 @@
     "test/base-test.js"
   ],
   "dependencies": {
-    "@pocketgems/dynamodb": "^0.2.0",
+    "@pocketgems/dynamodb": "^0.2.3",
     "@pocketgems/schema": "^0.1.0",
     "fastify": "^3.0.2",
     "fastify-compress": "^3.4.2",
@@ -61,11 +62,13 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^26.4.2",
+    "jsdoc": "3.6.4",
     "license-webpack-plugin": "^2.3.17",
     "nodemon": "^2.0.20",
     "standard": "^15.0.0",
     "superagent-defaults": "^0.1.14",
     "supertest": "^4.0.2",
+    "tui-jsdoc-template": "^1.2.2",
     "webpack": "^5.13.0",
     "webpack-cli": "^4.3.1"
   },

@@ -45,7 +45,7 @@ least these required members:
   * `DESC` - a human-readable description of what the API does
   * `RESPONSE` - describes the shape of the output JSON (more on this later)
   * `computeResponse()` - processes the request and returns the response
-```javascript <!-- embed:./examples/docs.js:scope:WhatTimeIsItAPI -->
+```javascript <!-- embed:../examples/docs.js:scope:WhatTimeIsItAPI -->
 class WhatTimeIsItAPI extends API {
   static PATH = '/whatTimeIsIt'
   static DESC = 'Returns the current date string'
@@ -62,7 +62,7 @@ Todea APIs can receive input data from a JSON-formatted HTTP request body. API
 input MUST ALWAYS be validated. To streamline this, API inputs must be
 described using [Todea schema](https://github.com/pocketgems/schema) (`S`)
 like this:
-```javascript <!-- embed:./examples/docs.js:scope:AddNumbersAPI -->
+```javascript <!-- embed:../examples/docs.js:scope:AddNumbersAPI -->
 class AddNumbersAPI extends API {
   static PATH = '/add'
   static DESC = 'returns the sum of a bunch of numbers'
@@ -117,7 +117,7 @@ static BODY = S.obj({
 ## API Output Data
 Todea APIs can send output data in a JSON-formatted HTTP response body. To do
 this, simply return an object from the `computeResponse()` method:
-```javascript <!-- embed:./examples/docs.js:scope:class ReplyWithValidatedObjectAPI:when an object is returned -->
+```javascript <!-- embed:../examples/docs.js:scope:class ReplyWithValidatedObjectAPI:when an object is returned -->
   // when an object is returned, it is automatically converted to a JSON string
   // and the HTTP response's Content-Type header is set to application/json
   async computeResponse () {
@@ -138,7 +138,7 @@ expected output, as well as double-checks the correctness of output generated
 by the API. Unexpected keys are considered as invalid. If you do not define an
 output schema, then no output is permitted. Output validation can be performed
 the same as input validation:
-```javascript <!-- embed:./examples/docs.js:section:response example start:response example end -->
+```javascript <!-- embed:../examples/docs.js:section:response example start:response example end -->
   // The RESPONSE getter defines which properties should be present in the
   // returned data. Only the defined properties are validated and sent. Any
   // extra properties would result in a 500 response.
@@ -155,7 +155,7 @@ the same as input validation:
 ```
 
 The response schema values can optionally be documented like this:
-```javascript <!-- embed:./examples/docs.js:section:another resp example start:another resp example end -->
+```javascript <!-- embed:../examples/docs.js:section:another resp example start:another resp example end -->
   static RESPONSE = S.obj({
     dragons: S.arr(S.str.desc('Dragon ID')).desc('Your dragons'),
     guineaPigs: S.arr(S.str.desc('name').desc('Your dragons')),
@@ -173,7 +173,7 @@ pass that error information back up the call stack simply to return that
 information from `computeResponse()`. It can be useful to simply end request
 processing at any point by throwing an exception which specifies the output.
 
-```javascript <!-- embed:./examples/docs.js:scope:ThrowToReplyAPI -->
+```javascript <!-- embed:../examples/docs.js:scope:ThrowToReplyAPI -->
 class ThrowToReplyAPI extends API {
   static PATH = '/throwToReturn'
   static DESC = 'returns some data by throwing'
@@ -216,7 +216,7 @@ const { UnauthorizedException } = EXCEPTIONS
 ```
 
 APIs must list the errors they may throw in `ERRORS` field.
-```javascript <!-- embed:./examples/docs.js:scope:DupErrorCodeAPI -->
+```javascript <!-- embed:../examples/docs.js:scope:DupErrorCodeAPI -->
 class DupErrorCodeAPI extends API {
   static PATH = '/dupErrorCode'
   static DESC = 'API with multiple error with the same status code.'
@@ -267,7 +267,7 @@ match the `RESPONSE` schema.
 ### Custom Success Status
 A non-standard 2xx status code can be used to indicate request success. The
 `RESPONSE` field must be assigned with a subclass of `RequestDone` like this
-```javascript <!-- embed:./examples/docs.js:scope:NonStandardResponse -->
+```javascript <!-- embed:../examples/docs.js:scope:NonStandardResponse -->
 class NonStandardResponse extends RequestDone {
   static STATUS = 201
 }
@@ -349,7 +349,7 @@ function (not called if the transaction fails to commit):
 Transactions sometimes retry due to contention, etc. It's important to not
 store state on `this`, `req` or other heap variables while your transaction
 runs, and then reference that data in a retry on accident.
-```javascript <!-- embed:./examples/tx.js:scope:RememberingTooMuchAPI -->
+```javascript <!-- embed:../examples/tx.js:scope:RememberingTooMuchAPI -->
 class RememberingTooMuchAPI extends TxAPI {
   static NAME = 'unwise memory use'
   static DESC = 'shares state across tx attempts and requests'
@@ -566,7 +566,7 @@ automatically added to the API's query string (`QS`), and `nextToken` is
 automatically added to the RESPONSE schema. These automatically added fields
 should not be manually added. In addition, `RESPONSE` must have exactly one
 schema field corresponding to an array schema.
-```javascript <!-- embed:./examples/pagination.js:scope:PaginatedAPI -->
+```javascript <!-- embed:../examples/pagination.js:scope:PaginatedAPI -->
 class PaginatedAPI extends API {
   static DESC = 'Paginated API'
   static PATH = '/paginated'
@@ -606,7 +606,7 @@ Here is an example API which differs from our convention in every way:
     * headers
     * request path
   * Its response body is XML formatted
-```javascript <!-- embed:./examples/docs.js:scope:NonStandardAddNumbersAPI -->
+```javascript <!-- embed:../examples/docs.js:scope:NonStandardAddNumbersAPI -->
 class NonStandardAddNumbersAPI extends API {
   static METHOD = 'PUT'
   static PATH = '/add/:num6/:num7'
@@ -773,7 +773,7 @@ CORS is not enabled (unless you choose to enable it).
 
 # Appendix
 The samples in this readme can be found in the APIs defined for unit testing
-this library in `examples/docs.js`.
+this library in `../examples/docs.js`.
 
 When necessary it is possible to use static getter functions instead of static
 member variables. For example, here's a contrived example that only accepts "n"
