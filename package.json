@@ -1,6 +1,6 @@
 {
   "name": "@pocketgems/app",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Todea App Library",
   "license": "Apache-2.0",
   "main": "src/index.js",
@@ -37,7 +37,7 @@
     "test/base-test.js"
   ],
   "dependencies": {
-    "@pocketgems/dynamodb": "^0.2.3",
+    "@pocketgems/dynamodb": "^0.2.4",
     "@pocketgems/schema": "^0.1.0",
     "fastify": "^3.0.2",
     "fastify-compress": "^3.4.2",
