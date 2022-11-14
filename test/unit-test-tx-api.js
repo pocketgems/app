@@ -3,7 +3,7 @@ const uuidv4 = require('uuid').v4
 const { BaseAppTest, runTests } = require('./base-test')
 
 function getURI (postfix) {
-  return '/unit-test' + postfix
+  return '/unittest' + postfix
 }
 
 class DynamodbLibTest extends BaseAppTest {
@@ -65,7 +65,7 @@ class DynamodbLibTest extends BaseAppTest {
     const app = this.app
     async function check (id, delta, numTimesToRetry, failInPreCommit) {
       const shouldSucceed = numTimesToRetry <= maxRetriesToSucceed
-      const resp = await app.post('/unit-test/dbWithTxAPI')
+      const resp = await app.post('/unittest/dbWithTxAPI')
         .set('Content-Type', 'application/json')
         .send({ id, delta, numTimesToRetry, failInPreCommit })
         .expect(shouldSucceed ? 200 : 500)
@@ -99,7 +99,7 @@ class DynamodbLibTest extends BaseAppTest {
     const app = this.app
     let lifetimeTries = 0
     async function check (numTries) {
-      const resp = await app.post('/unit-test/overshare')
+      const resp = await app.post('/unittest/overshare')
         .set('Content-Type', 'application/json')
         .send({ numTries })
         .expect(200)

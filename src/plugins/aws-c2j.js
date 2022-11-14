@@ -235,11 +235,9 @@ class C2JShapeExporter {
       baseExporter.__exportDefault(schema, 'structure')
     const members = {}
     const required = []
-    // SDKs are responsible for setting these up globally, instead of
-    // per request. Remove these keys so they are not tied to the request.
-    const hiddenKeys = ['x-app', 'x-uid', 'x-token', 'x-admin']
+
     for (const [name, p] of Object.entries(schema.objectSchemas)) {
-      if (hiddenKeys.includes(name)) {
+      if (this.constructor.GLOBAL_HEADERS?.includes(name)) {
         continue
       }
       const camelName = toStringID(name)
@@ -375,9 +373,11 @@ class C2JExporter {
   }) {
     this.apis = apis
     const compactName = name.replace(/[^a-zA-Z0-9]/g, '')
-    assert.ok(id === compactName.toLowerCase(),
-      `Lowercase name ${name} without spaces or non-alphanumeric characters ` +
-      `must match the id ${id}.`)
+    // istanbul ignore if
+    if (id !== compactName.toLowerCase()) {
+      throw new Error(`Lowercase name ${name} without spaces or ` +
+        `non-alphanumeric characters must match the id ${id}.`)
+    }
     const lowerCaseVersion = version.toLowerCase()
     this.metadata = {
       serviceId: id,
@@ -711,36 +711,49 @@ class C2JExporter {
  *
  * @param {Fastify} fastify A fastify instance.
  * @param {Object} opts Options
- * @param {String} [opts.pathPrefix='/c2j'] Prefix for schema endpoints.
- * @param {String} opts.apiId A lower case identifier for the API.
- * @param {String} opts.apiName A UpperCamelCased name for the API.
- * @param {String} opts.apiVersion A date string of when the API is released.
+ * @param {string} opts.service Lower case ID for the SDK, also constructs
+ *   SDK schema paths like `/[service]/[path]/:group/:type
+ * @param {string} [opts.path='/c2j'] Constructs path `/[service]/[path]/:group/:type
+ * @param {string} opts.displayName A UpperCamelCased name for the API.
+ * @param {string} opts.version A date string of when the API is released.
  *   For example, '2020-09-20'.
- * @param {String} opts.apiDescription A high level overview of the service.
+ * @param {string} opts.displayName A UpperCamelCased name for the API.
+ * @param {string} opts.signatureVersion AWS SDK signature version, e.g. v4
+ * @param {string} opts.globalEndpoint Global endpoint
+ * @param {string} opts.globalHeaders A list of header keys to skip as API
+ *   input, these inputs will be provided at SDK level, e.g. ACCESS_KEY_ID, or
+ *   SECRET_ACCESS_KEY in vanilla AWS SDK. You can also make your own
+ *   customizations
  * @param {Array<TodeaAPI>} opts.apis A list of Todea APIs.
  * @param {Function} next A callback to signal plug-in installation completion.
  */
 function c2jExporter (fastify, opts, next) {
-  opts = Object.assign({}, opts)
-  // istanbul ignore next
+  // istanbul ignore if
+  if (opts.awsC2j.disabled) {
+    next()
+    return
+  }
+
   const {
-    pathPrefix = '/c2j',
-    apiId,
-    name,
+    service,
+    path,
+    displayName,
     version,
-    apis,
     signatureVersion,
-    globalEndpoint
-  } = opts.c2j
+    globalEndpoint,
+    globalHeaders,
+    apis
+  } = opts.awsC2j
   for (const api of apis) {
     // istanbul ignore if
     if (!['user', 'admin', 'service', null].includes(api.SDK_GROUP)) {
       throw new Error(`Invalid SDK_GROUP value ${api.SDK_GROUP} for ${api}`)
     }
   }
+  C2JShapeExporter.GLOBAL_HEADERS = globalHeaders
   const exporterArgs = {
-    id: apiId,
-    name,
+    id: service,
+    name: displayName,
     version,
     description: '',
     signatureVersion,
@@ -761,7 +774,7 @@ function c2jExporter (fastify, opts, next) {
     })
   }
   fastify.get(
-    pathPrefix + '/:sdkGroup/:type',
+    `/${service}${path}/:sdkGroup/:type`,
     { schema: { hide: true } },
     async (req, reply) => {
       const exporter = exporters[req.params.sdkGroup]

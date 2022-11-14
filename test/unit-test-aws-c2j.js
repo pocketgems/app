@@ -191,6 +191,7 @@ class C2JOperationTest extends BaseTest {
   }
 
   testGlobalFields () {
+    C2JShapeExporter.GLOBAL_HEADERS = ['x-uid', 'x-token', 'x-admin', 'x-app']
     const API = new FakeAPI({
       name: 'AAPI',
       PATH: '/aBc/:Aaac123/cc/:a1/:b2',
@@ -218,6 +219,7 @@ class C2JOperationTest extends BaseTest {
     expect(c2j.shapes.XAdmin).toBeUndefined()
     expect(c2j.shapes.XApp).toBeUndefined()
     expect(c2j.shapes.Something).toBeDefined()
+    C2JShapeExporter.GLOBAL_HEADERS = []
   }
 
   testHttpConvention () {
@@ -1145,13 +1147,13 @@ class C2JShapeTest extends BaseTest {
 class C2JAPITest extends BaseAppTest {
   async testC2JSchema () {
     if (process.env.NODE_ENV === 'localhost') {
-      await this.app.get('/unit-test/c2j/user/api')
+      await this.app.get('/unittest/c2j/user/api')
         .expect(200)
-      await this.app.get('/unit-test/c2j/user/api')
+      await this.app.get('/unittest/c2j/user/api')
         .expect(200)
-      await this.app.get('/unit-test/c2j/admin/api')
+      await this.app.get('/unittest/c2j/admin/api')
         .expect(200)
-      await this.app.get('/unit-test/c2j/admin/api')
+      await this.app.get('/unittest/c2j/admin/api')
         .expect(200)
     }
   }

@@ -8,7 +8,7 @@ const { BaseAppTest, mockGot, runTests } = require('./base-test')
 const mockedGot = mockGot()
 
 function getURI (path) {
-  return `/unit-test${path}`
+  return `/unittest${path}`
 }
 
 function checkAPIRegisterWithErr (cls, errMsgOrError, moreOptions) {

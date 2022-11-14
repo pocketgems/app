@@ -3,7 +3,7 @@ const zlib = require('zlib')
 const { BaseAppTest, runTests } = require('./base-test')
 
 function getURI (path) {
-  return `/unit-test${path}`
+  return `/unittest${path}`
 }
 
 class CompressionTest extends BaseAppTest {
