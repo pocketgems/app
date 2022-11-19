@@ -80,11 +80,13 @@ const AWS_C2J_CONFIG = {
  * @property {Array<string>} [servers=[]] The host endpoint (scheme + domain) to
  *   send requests to
  * @property {Array<string>} [authHeaders=[]] Authentication headers
+ * @property {string} [routePrefix='/docs'] Authentication headers
  */
 const SWAGGER_CONFIG = {
   disabled: false,
   servers: [],
-  authHeaders: []
+  authHeaders: [],
+  routePrefix: '/docs'
 }
 
 /**

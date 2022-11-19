@@ -14,8 +14,7 @@ module.exports = fp(function (fastify, options, next) {
     openapi: {
       servers: options.swagger.servers.map(x => { return { url: x } }),
       info: {
-        title: `${options.swagger.service} Service`,
-        version: 'Version ' + (process.env.SERVICE_VERSION || 'default')
+        title: `${options.swagger.service} Service`
       },
       consumes: ['application/json'],
       produces: ['application/json'],
@@ -32,7 +31,7 @@ module.exports = fp(function (fastify, options, next) {
     }
   })
   fastify.register(swaggerUI, {
-    routePrefix: '/docs',
+    routePrefix: options.swagger.routePrefix,
     exposeRoute: true,
     uiConfig: {
       docExpansion: 'full',

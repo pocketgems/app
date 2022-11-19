@@ -9,6 +9,7 @@ enterprise scale applications supporting millions of users.
   - [Creating A Database Table](#creating-a-database-table)
   - [Creating An API](#creating-an-api)
   - [Creating An App](#creating-an-app)
+  - [Starting Server](#starting-server)
 - [Components](#components)
   - [Customizing Component Registration](#customizing-component-registration)
 - [Unit testing](#unit-testing)
@@ -139,24 +140,27 @@ module.exports = makeApp({
   swagger: {
     disabled: false,
     authHeaders: ['x-app', 'x-uid', 'x-admin', 'x-token'],
-    servers: ['http://localhost:8080']
+    servers: ['http://localhost:8080'],
+    routePrefix: '/app/docs'
   }
 })
 ```
 
+## Starting Server
 The `makeApp()` helper method creates a fastify instance with a few plugins
 loaded already. You may customize the fastify instance further using fastify's
 customization features. To start the app, you have to call `.listen()` according
 to
-[Fastify's documentation](https://www.fastify.io/docs/latest/Reference/Server/#listen), like this:
-```js
-// in src/server.js
-const appPromise = require('./app')
-
-appPromise.then(app => app.listen(8080, '0.0.0.0', (err) => {
-  console.log(err)
-  process.exit(1)
-}))
+[Fastify's documentation](https://www.fastify.io/docs/latest/Reference/Server/#listen).
+For example, `makeApp()` is called in a `app.js` file, and the returned promise
+is exported, then you write the following code to create a server:
+```javascript <!-- embed:examples/server.js:section:example start:example end -->
+require(pathToApp)
+  .then(app => app.listen({ port: 8090, host: '0.0.0.0' }))
+  .catch((err) => {
+    console.log(err)
+    process.exit(1)
+  })
 ```
 
 # Components

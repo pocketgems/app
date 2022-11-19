@@ -24,7 +24,8 @@ module.exports = makeApp({
   swagger: {
     disabled: false,
     authHeaders: ['x-app', 'x-uid', 'x-admin', 'x-token'],
-    servers: ['http://localhost:8080']
+    servers: ['http://localhost:8080'],
+    routePrefix: '/app/docs'
   }
 })
 // example end
