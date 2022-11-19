@@ -1,7 +1,9 @@
 // istanbul ignore file
 const querystring = require('querystring')
 
+const pino = require('pino')
 const wrap = require('word-wrap')
+
 // for localhost and unit testing, output to the console INSTEAD of to stdout
 // via pino (so that jest captures the output and groups it with the right test
 // suite)
@@ -91,7 +93,7 @@ module.exports = function makeCustomLogger (isLocalhost) {
       q: q || querystring.decode(qs)
     }
   }
-  const logger = {
+  const options = {
     base: null, // omit pino default fields like pid and hostname
     level: (process.env.NODE_ENV === 'prod') ? 'info' : 'debug',
     serializers: {
@@ -103,7 +105,7 @@ module.exports = function makeCustomLogger (isLocalhost) {
   }
   // on localhost, we customize the logs to optimize for console-based debugging
   if (isLocalhost) {
-    Object.assign(logger, getLocalhostOverrides())
+    Object.assign(options, getLocalhostOverrides())
   }
-  return logger
+  return pino(options)
 }

@@ -19,7 +19,7 @@ class LatencyTrackerTest extends BaseAppTest {
     checkHeader(defaultResp)
 
     // Testing return with different code have response-time
-    for (const manualCode of [200, 300, 400]) {
+    for (const manualCode of [200, 300, 401]) {
       const resp = await this.app.post(getURI('/setCode'))
         .set('Content-Type', 'application/json')
         .send({ manualCode })

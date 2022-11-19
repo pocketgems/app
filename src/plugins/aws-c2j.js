@@ -217,7 +217,7 @@ class C2JShapeExporter {
   }
 
   exportNumber (schema) {
-    if (schema.getProp('isFloat')) {
+    if (schema.isFloat) {
       return this.__exportDefault(schema, 'float')
     }
     return this.__exportDefault(schema, 'double')

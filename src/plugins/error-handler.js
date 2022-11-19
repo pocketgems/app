@@ -31,17 +31,7 @@ module.exports = fp(function (fastify, options, next) {
     const response = reply.raw
     /* istanbul ignore next */
     const message = error.message || 'empty error message'
-    const statusCode = (() => {
-      if (error.httpCode) {
-        // Assume any error with httpCode is generated from Todea and is
-        // intended as the response status code.
-        return error.httpCode
-      } else {
-        // If the error had neither httpCode nor statusCode, assume the
-        // statusCode already in response code is correct.
-        return response.statusCode
-      }
-    })()
+    const statusCode = error.httpCode ?? error.statusCode ?? 500
     reply.code(statusCode)
     const errInfo = {
       msg: message,

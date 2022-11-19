@@ -8,7 +8,7 @@
 // so we can ignore it in linting
 const zlib = require('zlib')
 
-const { fastifyCompress } = require('fastify-compress')
+const { fastifyCompress } = require('@fastify/compress')
 const fp = require('fastify-plugin')
 
 // TODO: fine tune configurations once we have a reliable usage pattern

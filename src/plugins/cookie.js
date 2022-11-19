@@ -1,4 +1,4 @@
-const cookiePlugin = require('fastify-cookie')
+const cookiePlugin = require('@fastify/cookie')
 const fp = require('fastify-plugin')
 
 function addContentParser (fastify, options, next) {

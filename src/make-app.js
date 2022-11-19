@@ -174,7 +174,10 @@ async function makeApp (params = {}) {
     ajv: {
       customOptions: {
         removeAdditional: false,
-        allErrors: logging.reportAllErrors
+        allErrors: logging.reportAllErrors,
+        useDefaults: true,
+        strictSchema: false,
+        strictRequired: true
       }
     }
   })

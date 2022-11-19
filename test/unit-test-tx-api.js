@@ -23,7 +23,7 @@ class DynamodbLibTest extends BaseAppTest {
   async testQueryJsonFail () {
     const result = await this.app.post(getURI('/clienterrors'))
       .query('{d}').expect(400)
-    expect(result.body.message).toBe('Body Validation Failure: body should be object')
+    expect(result.body.message).toBe('Body Validation Failure: body must be object')
   }
 
   async testBodyJsonFail () {
@@ -39,7 +39,7 @@ class DynamodbLibTest extends BaseAppTest {
       .send('{}')
       .set('Content-Type', 'application/json')
       .expect(400)
-    expect(result.body.message).toBe("Body Validation Failure: body should have required property 'json'")
+    expect(result.body.message).toBe("Body Validation Failure: body must have required property 'json'")
   }
 
   async testBodyContentTypeFail () {

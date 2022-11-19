@@ -31,8 +31,8 @@ class DocsTest extends BaseAppTest {
     }
 
     await check(200, 200)
-    await check(400, 400)
-    await check(500, 500)
+    await check(401, 401)
+    await check(501, 501)
   }
 
   async testTimeAPI () {

@@ -1,6 +1,7 @@
 // istanbul ignore file
+const swagger = require('@fastify/swagger')
+const swaggerUI = require('@fastify/swagger-ui')
 const fp = require('fastify-plugin')
-const swagger = require('fastify-swagger')
 
 module.exports = fp(function (fastify, options, next) {
   if (options.swagger.disabled) {
@@ -10,8 +11,6 @@ module.exports = fp(function (fastify, options, next) {
 
   const authHeaders = options.swagger.authHeaders
   fastify.register(swagger, {
-    routePrefix: '/docs',
-    exposeRoute: true,
     openapi: {
       servers: options.swagger.servers.map(x => { return { url: x } }),
       info: {
@@ -29,17 +28,21 @@ module.exports = fp(function (fastify, options, next) {
           }
           return all
         }, {})
-      },
-      uiConfig: {
-        docExpansion: 'full',
-        deepLinking: false
       }
     }
   })
-  fastify.addHook('onReady', function (done) {
-    fastify.swagger()
-    done()
+  fastify.register(swaggerUI, {
+    routePrefix: '/docs',
+    exposeRoute: true,
+    uiConfig: {
+      docExpansion: 'full',
+      deepLinking: false
+    }
   })
+  // fastify.addHook('onReady', function (done) {
+  //   fastify.swagger()
+  //   done()
+  // })
   next()
 }, {
   fastify: '>=3.x',

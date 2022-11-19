@@ -456,7 +456,7 @@ class BasicTest extends BaseAppTest {
     checkHeader(defaultResp)
 
     // Testing return with different code have response-time
-    for (const manualCode of [200, 300, 400]) {
+    for (const manualCode of [200, 300, 401]) {
       const resp = await this.app.post(getURI('/setCode'))
         .set('Content-Type', 'application/json')
         .send({ manualCode })
@@ -528,7 +528,7 @@ class RequestValidationTest extends BaseAppTest {
       })
       .expect(400, {
         code: 'InvalidInputException',
-        message: 'Body Validation Failure: body.value should be string, body.anotherValue should be integer',
+        message: 'Body Validation Failure: body/value must be string, body/anotherValue must be integer',
         data: {}
       })
   }
@@ -542,7 +542,7 @@ class RequestValidationTest extends BaseAppTest {
       })
       .expect(400, {
         code: 'InvalidInputException',
-        message: 'Body Validation Failure: body.value should be string',
+        message: 'Body Validation Failure: body/value must be string',
         data: {}
       })
   }
@@ -551,7 +551,7 @@ class RequestValidationTest extends BaseAppTest {
     await this.makeRequest({ header: '12' })
       .expect(400, {
         code: 'InvalidInputException',
-        message: "Header Validation Failure: headers['x-header'] should NOT be shorter than 4 characters",
+        message: 'Header Validation Failure: headers/x-header must NOT have fewer than 4 characters',
         data: {}
       })
   }
@@ -560,7 +560,7 @@ class RequestValidationTest extends BaseAppTest {
     await this.makeRequest({ pathParam: 'ASTRING' })
       .expect(400, {
         code: 'InvalidInputException',
-        message: 'Path Validation Failure: params.aString should match pattern "^[a-z]$"',
+        message: 'Path Validation Failure: params/aString must match pattern "^[a-z]$"',
         data: {}
       })
   }
@@ -569,7 +569,7 @@ class RequestValidationTest extends BaseAppTest {
     await this.makeRequest({ queryParam: 'ASTRING' })
       .expect(400, {
         code: 'InvalidInputException',
-        message: 'Query Validation Failure: querystring.param should be equal to one of the allowed values',
+        message: 'Query Validation Failure: querystring/param must be equal to one of the allowed values',
         data: {}
       })
   }
