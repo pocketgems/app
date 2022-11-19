@@ -12,18 +12,10 @@
     "start-local-db": "yarn --cwd ./node_modules/@pocketgems/dynamodb setup; yarn --cwd ./node_modules/@pocketgems/dynamodb start-local-db"
   },
   "contributors": [
-    {
-      "name": "David Underhill"
-    },
-    {
-      "name": "Yu Guan"
-    },
-    {
-      "name": "Solaman Huq"
-    },
-    {
-      "name": "Shimul Bhowmik"
-    }
+    "David Underhill",
+    "Yu Guan",
+    "Solaman Huq",
+    "Shimul Bhowmik"
   ],
   "repository": {
     "type": "git",
@@ -43,9 +35,8 @@
     "fastify-compress": "^3.4.2",
     "fastify-cookie": "^4.1.0",
     "fastify-plugin": "^2.0.1",
-    "fastify-static": "^3.3.0",
+    "fastify-swagger": "4.12.6",
     "got": "^11.5.2",
-    "swagger-ui-dist": "^4.15.2",
     "word-wrap": "^1.2.3"
   },
   "devDependencies": {

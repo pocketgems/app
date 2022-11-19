@@ -685,6 +685,95 @@ class C2JExporter {
   }
 
   /**
+   * Collapse shapes into operations, only keep input, output
+   */
+  __minC2J () {
+    const c2j = this.__normalC2J()
+    const { operations, shapes, metadata, version } = c2j
+    const ret = { metadata, version }
+
+    const referenceCount = {}
+    function countReference (name) {
+      referenceCount[name] = 1 + (referenceCount[name] ?? 0)
+      const shape = shapes[name]
+      if (shape.type === 'list') {
+        countReference(shape.member.shape)
+      } else if (shape.type === 'structure') {
+        for (const member of Object.values(shape.members)) {
+          countReference(member.shape)
+        }
+      }
+    }
+    for (const operation of Object.values(operations)) {
+      // istanbul ignore else
+      if (operation.input) {
+        countReference(operation.input.shape)
+      }
+      // istanbul ignore else
+      if (operation.output) {
+        countReference(operation.output.shape)
+      }
+    }
+
+    function expandShape (name, refCnt) {
+      const shape = shapes[name]
+      if (shape.type === 'string') {
+        return {}
+      } else if (shape.type === 'list') {
+        return {
+          type: 'list',
+          member: expandShape(shape.member.shape, refCnt)
+        }
+      } else if (shape.type === 'structure') {
+        if (refCnt[name] > 1) {
+          return { shape: name }
+        }
+        const ret = {
+          type: shape.type,
+          members: {}
+        }
+        if (shape.required) {
+          ret.required = shape.required
+        }
+        for (const [key, val] of Object.entries(shape.members)) {
+          ret.members[key] = expandShape(val.shape, refCnt)
+        }
+        return ret
+      } else {
+        return { type: shape.type }
+      }
+    }
+
+    const ops = {}
+    for (const operation of Object.values(operations)) {
+      const data = { }
+      // istanbul ignore else
+      if (operation.input) {
+        data.input = expandShape(operation.input.shape, referenceCount)
+      }
+      // istanbul ignore else
+      if (operation.output) {
+        data.output = expandShape(operation.output.shape, referenceCount)
+      }
+      ops[operation.name] = data
+    }
+
+    const shapesToKeep = {}
+    for (const name of Object.keys(referenceCount)) {
+      const shape = shapes[name]
+      if (referenceCount[name] > 1 && shape.type === 'structure') {
+        shapesToKeep[name] = expandShape(name, {})
+      }
+    }
+
+    return {
+      ...ret,
+      operations: ops,
+      shapes: shapesToKeep
+    }
+  }
+
+  /**
    * @return The UID of C2J schema.
    */
   __uidC2J () {
@@ -694,7 +783,7 @@ class C2JExporter {
 
   /**
    * Returns a C2J schema of specified type.
-   * @param {'uid'|'normal'|'api'|'docs'} type The type of the C2J schema.
+   * @param {'uid'|'normal'|'api'|'docs'|'examples'|'min'} type The type of the C2J schema.
    */
   getC2J (type) {
     this.processAPIs()

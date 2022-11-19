@@ -20,6 +20,11 @@ module.exports = makeApp({
     signatureVersion: 'v4',
     globalEndpoint: 'todea.example.com',
     globalHeaders: ['x-app', 'x-uid', 'x-admin', 'x-token']
+  },
+  swagger: {
+    disabled: false,
+    authHeaders: ['x-app', 'x-uid', 'x-admin', 'x-token'],
+    servers: ['http://localhost:8080']
   }
 })
 // example end

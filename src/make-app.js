@@ -9,6 +9,7 @@ const cookiePlugin = require('./plugins/cookie')
 const errorHandlerPlugin = require('./plugins/error-handler')
 const healthCheckPlugin = require('./plugins/health-check')
 const latencyTrackerPlugin = require('./plugins/latency-tracker')
+const swaggerPlugin = require('./plugins/swagger')
 
 /**
  * @typedef {object} CookieConfig
@@ -74,6 +75,19 @@ const AWS_C2J_CONFIG = {
 }
 
 /**
+ * @typedef {object} SwaggerConfig
+ * @property {boolean} [disabled=false] Whether to disable AWS C2J schema APIs
+ * @property {Array<string>} [servers=[]] The host endpoint (scheme + domain) to
+ *   send requests to
+ * @property {Array<string>} [authHeaders=[]] Authentication headers
+ */
+const SWAGGER_CONFIG = {
+  disabled: false,
+  servers: [],
+  authHeaders: []
+}
+
+/**
  * @typedef {object} LatencyTrackerConfig
  * @property {boolean} [disabled=false] Whether to add a health check endpoint
  *   that simply returns 200.
@@ -92,7 +106,8 @@ const PARAMS_CONFIG = {
   cookie: {},
   healthCheck: {},
   latencyTracker: {},
-  logging: {}
+  logging: {},
+  swagger: {}
 }
 
 function loadConfigDefault (config, defaultConfig) {
@@ -125,6 +140,7 @@ function loadConfigDefault (config, defaultConfig) {
  * @param {HealthCheckConfig} [params.healthCheck] Configures health check endpoint.
  * @param {LatencyTrackerConfig} [params.latencyTracker]
  * @param {LoggingConfig} [params.logging] Configures logging.
+ * @param {SwaggerConfig} [params.swagger] Configures swagger.
  * @returns {Promise<server>} fastify app with configured plugins
  */
 async function makeApp (params = {}) {
@@ -133,8 +149,9 @@ async function makeApp (params = {}) {
     [() => params.awsC2j, AWS_C2J_CONFIG],
     [() => params.cookie, COOKIE_CONFIG],
     [() => params.healthCheck, HEALTH_CHECK_CONFIG],
+    [() => params.latencyTracker, LATENCY_TRACKER_CONFIG],
     [() => params.logging, LOGGING_CONFIG],
-    [() => params.latencyTracker, LATENCY_TRACKER_CONFIG]
+    [() => params.swagger, SWAGGER_CONFIG]
   ]
   for (const [getter, defaultConfig] of configs) {
     loadConfigDefault(getter(), defaultConfig)
@@ -147,7 +164,8 @@ async function makeApp (params = {}) {
     cookie,
     healthCheck,
     latencyTracker,
-    logging
+    logging,
+    swagger
   } = params
   const app = fastify({
     ignoreTrailingSlash: true,
@@ -161,6 +179,8 @@ async function makeApp (params = {}) {
     }
   })
 
+  const registrator = new RegistratorCls(app, service)
+
   app.register(cookiePlugin, { cookie })
     .register(compressPlugin)
     .register(contentParserPlugin)
@@ -169,14 +189,9 @@ async function makeApp (params = {}) {
       errorHandler: { returnErrorDetail: logging.reportErrorDetail }
     })
     .register(healthCheckPlugin, { healthCheck })
+    .register(swaggerPlugin, { swagger })
 
-  const registrator = new RegistratorCls(app, service)
-  for (const component of Object.values(components)) {
-    if (component.register) {
-      component.register(registrator)
-    }
-  }
-  await Promise.all(registrator.promises)
+  await registrator.registerComponents(components)
 
   app.register(awsPlugin, {
     awsC2j: {

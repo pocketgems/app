@@ -156,6 +156,18 @@ class C2JMetadataTest extends BaseTest {
     exp.getC2J('paginators')
     exp.getC2J('examples')
   }
+
+  testExportMin () {
+    const exporter = new C2JExporter({
+      id: '',
+      name: '',
+      version: '',
+      description: '',
+      apis: []
+    })
+    exporter.__normalC2J = () => require('./normal.json')
+    expect(exporter.getC2J('min')).toEqual(require('./min.json'))
+  }
 }
 
 class C2JOperationTest extends BaseTest {
