@@ -194,7 +194,7 @@ async function makeApp (params = {}) {
       errorHandler: { returnErrorDetail: logging.reportErrorDetail }
     })
     .register(healthCheckPlugin, { healthCheck })
-    .register(swaggerPlugin, { swagger })
+    .register(swaggerPlugin, { swagger: { service, ...swagger } })
 
   await registrator.registerComponents(components)
 
