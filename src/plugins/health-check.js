@@ -10,7 +10,7 @@ module.exports = fp(function (fastify, options, next) {
   const path = options.healthCheck.path ?? '/'
   fastify.get(path, { schema: { hide: true } },
     async (req, reply) => {
-      reply.send()
+      await reply.send()
     })
   next()
 }, {

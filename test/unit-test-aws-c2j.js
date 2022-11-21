@@ -1158,16 +1158,14 @@ class C2JShapeTest extends BaseTest {
 
 class C2JAPITest extends BaseAppTest {
   async testC2JSchema () {
-    if (process.env.NODE_ENV === 'localhost') {
-      await this.app.get('/unittest/c2j/user/api')
-        .expect(200)
-      await this.app.get('/unittest/c2j/user/api')
-        .expect(200)
-      await this.app.get('/unittest/c2j/admin/api')
-        .expect(200)
-      await this.app.get('/unittest/c2j/admin/api')
-        .expect(200)
-    }
+    await this.app.get('/unittest/c2j/user/api')
+      .expect(200)
+    await this.app.get('/unittest/c2j/user/api')
+      .expect(200)
+    await this.app.get('/unittest/c2j/admin/api')
+      .expect(200)
+    await this.app.get('/unittest/c2j/admin/api')
+      .expect(200)
   }
 }
 

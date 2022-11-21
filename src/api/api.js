@@ -463,13 +463,13 @@ class API {
       const path = cls.getFullPath(service)
       const { params, querystring } = cls.swaggerSchema
       const schema = { hide: true, params, querystring }
-      app.options(path, { schema }, (req, reply) => {
+      app.options(path, { schema }, async (req, reply) => {
         reply.header('Access-Control-Allow-Origin', this.getCORSOrigin())
         if (this.CORS_HEADERS) {
           reply.header('Access-Control-Allow-Headers',
             this.CORS_HEADERS.join(', '))
         }
-        reply.send()
+        await reply.send()
       })
     }
   }

@@ -875,9 +875,9 @@ function c2jExporter (fastify, opts, next) {
         if (typeof c2j !== 'string') {
           reply.type('application/json')
         }
-        reply.send(c2j)
+        await reply.send(c2j)
       } else {
-        reply.send('')
+        await reply.send('')
       }
     }
   )

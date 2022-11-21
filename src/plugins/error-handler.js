@@ -94,7 +94,7 @@ module.exports = fp(function (fastify, options, next) {
       errorData.stack = errInfo.stack
     }
 
-    reply.header('Content-Type', 'application/json; charset=utf-8')
+    await reply.header('Content-Type', 'application/json; charset=utf-8')
       .serializer(o => JSON.stringify(o, null, 2))
       .send(errorData)
   })
