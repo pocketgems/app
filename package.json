@@ -1,6 +1,6 @@
 {
   "name": "@pocketgems/app",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Todea App Library",
   "license": "Apache-2.0",
   "main": "src/index.js",
@@ -33,19 +33,23 @@
     "@fastify/cookie": "^8.3.0",
     "@fastify/swagger": "^8.1.0",
     "@fastify/swagger-ui": "^1.2.0",
-    "@pocketgems/dynamodb": "^0.2.8",
-    "@pocketgems/schema": "^0.1.2",
     "fastify": "^4.10.0",
     "fastify-plugin": "^2.0.1",
     "got": "^11.5.2",
     "pino": "6.13.0",
     "word-wrap": "^1.2.3"
   },
+  "peerDependencies": {
+    "@pocketgems/dynamodb": "^0.2.9",
+    "@pocketgems/schema": "^0.1.2"
+  },
   "devDependencies": {
     "@babel/core": "^7.17.12",
     "@babel/eslint-parser": "^7.17.0",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/preset-env": "^7.17.12",
+    "@pocketgems/dynamodb": "^0.2.9",
+    "@pocketgems/schema": "^0.1.2",
     "@pocketgems/unit-test": "^0.0.1",
     "babel-loader": "^8.2.2",
     "eslint": "^8.22.0",
