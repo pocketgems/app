@@ -14,6 +14,20 @@ const {
 const RESPONSES = require('./response')
 
 /**
+ * Given an object, return a new object with undefined keys removed.
+ * @param {*} obj Input object, with potentially undefined keys
+ * @returns new obj with no undefined keys
+ */
+function pruneUndefined (obj) {
+  return Object.entries(obj).reduce((all, [key, val]) => {
+    if (val !== undefined) {
+      all[key] = val
+    }
+    return all
+  }, {})
+}
+
+/**
    * Takes API level properties and generates JSON configurations to use
    * when registering the API with fastify.
    *
@@ -422,8 +436,8 @@ class API {
     this.__reply.redirect(schemeAndHost + path + qStr)
   }
 
-  static register (registrator) {
-    registrator.registerAPI(this)
+  static async register (registrator) {
+    await registrator.registerAPI(this)
   }
 
   /**
@@ -463,14 +477,15 @@ class API {
       const path = cls.getFullPath(service)
       const { params, querystring } = cls.swaggerSchema
       const schema = { hide: true, params, querystring }
-      app.options(path, { schema }, async (req, reply) => {
-        reply.header('Access-Control-Allow-Origin', this.getCORSOrigin())
-        if (this.CORS_HEADERS) {
-          reply.header('Access-Control-Allow-Headers',
-            this.CORS_HEADERS.join(', '))
-        }
-        await reply.send()
-      })
+      app.options(path, { schema: pruneUndefined(schema) },
+        async (req, reply) => {
+          reply.header('Access-Control-Allow-Origin', this.getCORSOrigin())
+          if (this.CORS_HEADERS) {
+            reply.header('Access-Control-Allow-Headers',
+              this.CORS_HEADERS.join(', '))
+          }
+          await reply.send()
+        })
     }
   }
 
@@ -696,12 +711,6 @@ enough data to fill the last page.`)
     const wrapInSchema = (x) => {
       return x.isTodeaSchema ? x : S.obj(x)
     }
-    let headers = this._getHeaders()
-    if (headers) {
-      // Make sure extra header fields are passed along
-      headers = wrapInSchema(headers).jsonSchema()
-      headers.additionalProperties = true // Hack to enable additional props
-    }
 
     // istanbul ignore next
     const tags = [this.TAG || 'default']
@@ -709,8 +718,14 @@ enough data to fill the last page.`)
       summary: this.NAME,
       description: this.getDescMarkdownString(),
       tags,
-      headers: headers,
       response: {}
+    }
+    let headers = this._getHeaders()
+    if (headers) {
+      // Make sure extra header fields are passed along
+      headers = wrapInSchema(headers).jsonSchema()
+      headers.additionalProperties = true // Hack to enable additional props
+      schema.headers = headers
     }
     if (this.TAG === null) {
       schema.hide = true
@@ -741,7 +756,7 @@ enough data to fill the last page.`)
     }
 
     schema.security = this.swaggerSecurityConfig
-    return schema
+    return pruneUndefined(schema)
   }
 
   /**

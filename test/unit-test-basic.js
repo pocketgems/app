@@ -11,7 +11,7 @@ function getURI (path) {
   return `/unittest${path}`
 }
 
-function checkAPIRegisterWithErr (cls, errMsgOrError, moreOptions) {
+async function checkAPIRegisterWithErr (cls, errMsgOrError, moreOptions) {
   let expError
   if (typeof errMsgOrError === 'string') {
     // caller expects an AssertionError; just include the options they gave us
@@ -37,7 +37,7 @@ function checkAPIRegisterWithErr (cls, errMsgOrError, moreOptions) {
     serviceName: 'badlydefinedservice'
   }
 
-  cls.register(fakeRegistrator)
+  await cls.register(fakeRegistrator)
   expect(async () => { await fakeApp.promise }).rejects.toEqual(expError)
 }
 
@@ -146,14 +146,14 @@ class BasicTest extends BaseAppTest {
       static DESC = ''
     }
 
-    checkAPIRegisterWithErr(MissingPathAPI, 'PATH must be overridden')
-    checkAPIRegisterWithErr(BadPathStartAPI, 'API path must start with a "/"')
-    checkAPIRegisterWithErr(BadPathAPI, 'API path should not have underscores')
-    checkAPIRegisterWithErr(MissingDescAPI, 'DESC must be overridden')
-    checkAPIRegisterWithErr(AlsoMissingDescAPI, 'DESC is missing', {
+    await checkAPIRegisterWithErr(MissingPathAPI, 'PATH must be overridden')
+    await checkAPIRegisterWithErr(BadPathStartAPI, 'API path must start with a "/"')
+    await checkAPIRegisterWithErr(BadPathAPI, 'API path should not have underscores')
+    await checkAPIRegisterWithErr(MissingDescAPI, 'DESC must be overridden')
+    await checkAPIRegisterWithErr(AlsoMissingDescAPI, 'DESC is missing', {
       operator: '==', expected: true
     })
-    checkAPIRegisterWithErr(EvenMoreMissingDescAPI, 'DESC is missing', {
+    await checkAPIRegisterWithErr(EvenMoreMissingDescAPI, 'DESC is missing', {
       operator: '==', expected: true, actual: ''
     })
   }
@@ -165,7 +165,7 @@ class BasicTest extends BaseAppTest {
         throw new Error('some error')
       }
     }
-    checkAPIRegisterWithErr(SomeAPI, new Error('some error'))
+    await checkAPIRegisterWithErr(SomeAPI, new Error('some error'))
   }
 
   async testForwardingHeaders () {

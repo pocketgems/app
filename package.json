@@ -1,6 +1,6 @@
 {
   "name": "@pocketgems/app",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Todea App Library",
   "license": "Apache-2.0",
   "main": "src/index.js",
@@ -38,6 +38,9 @@
     "got": "^11.5.2",
     "pino": "6.13.0",
     "word-wrap": "^1.2.3"
+  },
+  "resolutions": {
+    "@fastify/static": "6.5.1"
   },
   "peerDependencies": {
     "@pocketgems/dynamodb": "^0.2.9",

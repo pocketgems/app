@@ -1,5 +1,4 @@
 class ComponentRegistrator {
-  promises = []
   apis = []
 
   constructor (app, service) {
@@ -8,21 +7,22 @@ class ComponentRegistrator {
   }
 
   async registerComponents (components) {
+    const promises = []
     for (const component of Object.values(components)) {
       if (component.register) {
-        component.register(this)
+        promises.push(component.register(this))
       }
     }
-    await Promise.all(this.promises)
+    await Promise.all(promises)
   }
 
-  registerAPI (api) {
+  async registerAPI (api) {
     this.apis.push(api)
-    api.registerAPI(this)
+    await api.registerAPI(this)
   }
 
-  registerModel (model) {
-    this.promises.push(model.createResources())
+  async registerModel (model) {
+    await model.createResources()
   }
 }
 
